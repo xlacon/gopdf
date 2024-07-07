@@ -1,3 +1,9 @@
+# README
+I'm incredibly grateful to the creator of github.com/tiechui1994/gopdf for open-sourcing this framework.
+I've forked the project and integrated some of my business logic into it, specifically focusing on the table generation feature.
+Additionally, I've included logic to read TTF files from byte slices and encryption functionality for PDFs.
+Please exercise caution when using the modified framework.
+
 ## gopdf
 
 ![GitHub](https://img.shields.io/github/v/release/tiechui1994/gopdf)
@@ -21,7 +27,7 @@ gopdf 是一个生成 `PDF` 文档的 `Golang` 库. 主要有以下的特点:
 ## 安装
 
 ```
-go get -u github.com/tiechui1994/gopdf
+go get -u github.com/coolbit/gopdf
 ```
 
 ## 案例展示: 

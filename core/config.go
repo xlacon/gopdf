@@ -9,6 +9,42 @@ type Config struct {
 	width, height  float64 // PDF page width and height
 
 	contentWidth, contentHeight float64 // PDF page content width and height
+
+	useProtection bool
+	permissions   int
+	ownerPass     []byte
+	userPass      []byte
+}
+
+func (c *Config) SetStartXY(x, y float64) {
+	c.startX = x
+	c.startY = y
+}
+
+func (c *Config) SetEndXY(x, y float64) {
+	c.endX = x
+	c.endY = y
+}
+
+func (c *Config) SetWidthAndHeight(width, height float64) {
+	c.width = width
+	c.height = height
+}
+
+func (c *Config) SetContentWidthAndHeight(width, height float64) {
+	c.contentWidth = width
+	c.contentHeight = height
+}
+
+func (c *Config) SetProtection(useProtection bool, permissions int, ownerPass, userPass []byte) {
+	c.useProtection = useProtection
+	c.permissions = permissions
+	c.ownerPass = ownerPass
+	c.userPass = userPass
+}
+
+func GetDefaultConfigs() map[string]*Config {
+	return defaultConfigs
 }
 
 // Params width, height is pdf page width and height
@@ -56,15 +92,19 @@ func (config *Config) GetEnd() (x, y float64) {
 
 var defaultConfigs map[string]*Config // page -> config
 
-/**************************************
+/*
+*************************************
 A0 ~ A5 page width and height config:
+
 	'A0': [2383.94, 3370.39],
 	'A1': [1683.78, 2383.94],
 	'A2': [1190.55, 1683.78],
 	'A3': [841.89, 1190.55],
 	'A4': [595.28, 841.89],
 	'A5': [419.53, 595.28],
-***************************************/
+
+**************************************
+*/
 func init() {
 	defaultConfigs = make(map[string]*Config)
 

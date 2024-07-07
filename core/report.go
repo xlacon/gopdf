@@ -365,6 +365,32 @@ func (report *Report) SetPage(size string, orientation string) {
 	report.execute(false)
 }
 
+func (report *Report) SetCustomA4Page(orientation string, config *Config) {
+	unit := "pt"
+
+	switch orientation {
+	case "P":
+		report.addAtomicCell("P|" + unit + "|A4|P")
+		report.pageWidth = config.width
+		report.pageHeight = config.height
+	case "L":
+		report.addAtomicCell("P|" + unit + "|A4|L")
+		report.pageWidth = config.height
+		report.pageHeight = config.width
+	}
+
+	report.contentWidth = config.contentWidth
+	report.contentHeight = config.contentHeight
+
+	report.pageStartX = config.startX
+	report.pageStartY = config.startY
+	report.pageEndX = config.endX
+	report.pageEndY = config.endY
+	report.config = config
+
+	report.execute(false)
+}
+
 // 获取底层的所有的原子单元内容
 func (report *Report) GetAtomicCells() *[]string {
 	cells := report.converter.GetAutomicCells()

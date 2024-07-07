@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"math/rand"
 	"strings"
-	"time"
 	"testing"
+	"time"
 
+	"github.com/signintech/gopdf"
 	"github.com/tiechui1994/gopdf/core"
 )
 
@@ -42,6 +43,38 @@ func SimpleTable() {
 	r.Execute("simple_table.pdf")
 	fmt.Println(r.GetCurrentPageNo())
 }
+
+func SimpleTableCustomA4Page() {
+	r := core.CreateReport()
+	font1 := core.FontMap{
+		FontName: TABLE_IG,
+		FileName: "example//ttf/ipaexg.ttf",
+	}
+	font2 := core.FontMap{
+		FontName: TABLE_MD,
+		FileName: "example//ttf/mplus-1p-bold.ttf",
+	}
+	font3 := core.FontMap{
+		FontName: TABLE_MY,
+		FileName: "example//ttf/microsoft.ttf",
+	}
+	r.SetFonts([]*core.FontMap{&font1, &font2, &font3})
+	cfg := core.GetDefaultConfigs()["A4"]
+	cfg.SetEndXY(37.14, 35.00)
+	cfg.SetEndXY(580.28, 810.89)
+	cfg.SetWidthAndHeight(520, 841.89)
+	cfg.SetContentWidthAndHeight(520, 841.89)
+
+	password := "hello world"
+	cfg.SetProtection(true, gopdf.PermissionsPrint|gopdf.PermissionsCopy|gopdf.PermissionsModify, []byte(password), []byte(password))
+	r.SetPage("A4", "P")
+
+	r.RegisterExecutor(core.Executor(SimpleTableExecutor), core.Detail)
+
+	r.Execute("simple_table_custom_a4_page.pdf")
+	fmt.Println(r.GetCurrentPageNo())
+}
+
 func SimpleTableExecutor(report *core.Report) {
 	lineSpace := 1.0
 	lineHeight := 18.0
@@ -294,6 +327,10 @@ func TestComplexTableReport(t *testing.T) {
 
 func TestSimpleTable(t *testing.T) {
 	SimpleTable()
+}
+
+func TestSimpleTableCustomA4Page(t *testing.T) {
+	SimpleTableCustomA4Page()
 }
 
 func TestManyTableReportWithData(t *testing.T) {

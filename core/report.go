@@ -83,14 +83,18 @@ func (report *Report) NoCompression() {
 	report.converter.NoCompression()
 }
 
-/****************************************************************
+/*
+***************************************************************
 Compression level:
+
 	-2: Only Huffman compression is used,
 	-1: Default value, compression level 6
 	0:  Not compress,
 	1:  The fastest compression, but the compression ratio is not the best
 	9:  Maximum compression, but the execution efficiency is also the slowest
-****************************************************************/
+
+***************************************************************
+*/
 func (report *Report) CompressLevel(level int) {
 	report.converter.CompressLevel(level)
 }
@@ -361,6 +365,32 @@ func (report *Report) SetPage(size string, orientation string) {
 	report.execute(false)
 }
 
+func (report *Report) SetCustomA4Page(orientation string, config *Config) {
+	unit := "pt"
+
+	switch orientation {
+	case "P":
+		report.addAtomicCell("P|" + unit + "|A4|P")
+		report.pageWidth = config.width
+		report.pageHeight = config.height
+	case "L":
+		report.addAtomicCell("P|" + unit + "|A4|L")
+		report.pageWidth = config.height
+		report.pageHeight = config.width
+	}
+
+	report.contentWidth = config.contentWidth
+	report.contentHeight = config.contentHeight
+
+	report.pageStartX = config.startX
+	report.pageStartY = config.startY
+	report.pageEndX = config.endX
+	report.pageEndY = config.endY
+	report.config = config
+
+	report.execute(false)
+}
+
 // 获取底层的所有的原子单元内容
 func (report *Report) GetAtomicCells() *[]string {
 	cells := report.converter.GetAutomicCells()
@@ -393,9 +423,13 @@ func (report *Report) AddCallBack(callback CallBack) {
 	report.callbacks = append(report.callbacks, callback)
 }
 
-/********************************************
- 将特定的字符串转换成底层可以识别的原子操作符
-*********************************************/
+/*
+*******************************************
+
+	将特定的字符串转换成底层可以识别的原子操作符
+
+********************************************
+*/
 func (report *Report) addAtomicCell(s string) {
 	report.converter.AddAtomicCell(s)
 }

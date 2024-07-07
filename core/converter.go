@@ -157,9 +157,29 @@ func (convert *Converter) Page(line string, elements []string) {
 		config := defaultConfigs["A3"]
 		convert.setunit(elements[1])
 		if elements[3] == "P" {
-			convert.start(config.width, config.height)
+			//convert.start(config.width, config.height)
+			convert.startWithConfig(gopdf.Config{
+				Unit:     gopdf.Unit_PT,
+				PageSize: gopdf.Rect{W: config.width, H: config.height},
+				Protection: gopdf.PDFProtectionConfig{
+					UseProtection: config.useProtection,
+					Permissions:   config.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
+					OwnerPass:     config.ownerPass,
+					UserPass:      config.userPass,
+				},
+			})
 		} else if elements[3] == "L" {
-			convert.start(config.height, config.width)
+			//convert.start(config.height, config.width)
+			convert.startWithConfig(gopdf.Config{
+				Unit:     gopdf.Unit_PT,
+				PageSize: gopdf.Rect{W: config.height, H: config.width},
+				Protection: gopdf.PDFProtectionConfig{
+					UseProtection: config.useProtection,
+					Permissions:   config.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
+					OwnerPass:     config.ownerPass,
+					UserPass:      config.userPass,
+				},
+			})
 		} else {
 			panic("Page Orientation accept P or L")
 		}
@@ -167,9 +187,29 @@ func (convert *Converter) Page(line string, elements []string) {
 		config := defaultConfigs["A4"]
 		convert.setunit(elements[1])
 		if elements[3] == "P" {
-			convert.start(config.width, config.height)
+			//convert.start(config.width, config.height)
+			convert.startWithConfig(gopdf.Config{
+				Unit:     gopdf.Unit_PT,
+				PageSize: gopdf.Rect{W: config.width, H: config.height},
+				Protection: gopdf.PDFProtectionConfig{
+					UseProtection: config.useProtection,
+					Permissions:   config.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
+					OwnerPass:     config.ownerPass,
+					UserPass:      config.userPass,
+				},
+			})
 		} else if elements[3] == "L" {
-			convert.start(config.height, config.width)
+			//convert.start(config.height, config.width)
+			convert.startWithConfig(gopdf.Config{
+				Unit:     gopdf.Unit_PT,
+				PageSize: gopdf.Rect{W: config.height, H: config.width},
+				Protection: gopdf.PDFProtectionConfig{
+					UseProtection: config.useProtection,
+					Permissions:   config.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
+					OwnerPass:     config.ownerPass,
+					UserPass:      config.userPass,
+				},
+			})
 		} else {
 			panic("Page Orientation accept P or L")
 		}
@@ -177,9 +217,29 @@ func (convert *Converter) Page(line string, elements []string) {
 		config := defaultConfigs["LTR"]
 		convert.setunit(elements[1])
 		if elements[3] == "P" {
-			convert.start(config.width, config.height)
+			//convert.start(config.width, config.height)
+			convert.startWithConfig(gopdf.Config{
+				Unit:     gopdf.Unit_PT,
+				PageSize: gopdf.Rect{W: config.width, H: config.height},
+				Protection: gopdf.PDFProtectionConfig{
+					UseProtection: config.useProtection,
+					Permissions:   config.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
+					OwnerPass:     config.ownerPass,
+					UserPass:      config.userPass,
+				},
+			})
 		} else if elements[3] == "L" {
-			convert.start(config.height, config.width)
+			//convert.start(config.height, config.width)
+			convert.startWithConfig(gopdf.Config{
+				Unit:     gopdf.Unit_PT,
+				PageSize: gopdf.Rect{W: config.height, H: config.width},
+				Protection: gopdf.PDFProtectionConfig{
+					UseProtection: config.useProtection,
+					Permissions:   config.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
+					OwnerPass:     config.ownerPass,
+					UserPass:      config.userPass,
+				},
+			})
 		} else {
 			panic("Page Orientation accept P or L")
 		}
@@ -216,6 +276,10 @@ func (convert *Converter) start(w float64, h float64) {
 		Unit:     gopdf.Unit_PT,
 		PageSize: gopdf.Rect{W: w, H: h},
 	}) // 595.28, 841.89 = A4
+}
+
+func (convert *Converter) startWithConfig(cfg gopdf.Config) {
+	convert.pdf.Start(cfg)
 }
 
 // Set Font used for the current text
@@ -506,7 +570,6 @@ func (convert *Converter) InternalLinkLink(line string, elements []string) {
 	convert.pdf.SetX(parseFloatPanic(elements[1], line) + parseFloatPanic(elements[3], line))
 	convert.pdf.SetY(parseFloatPanic(elements[2], line))
 }
-
 
 func (convert *Converter) Margin(line string, eles []string) {
 	checkLength(line, eles, 3)

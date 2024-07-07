@@ -10,8 +10,10 @@ import (
 )
 
 type FontMap struct {
-	FontName string
-	FileName string
+	FontName     string
+	FileName     string
+	Data         []byte
+	ReadFromData bool
 }
 
 // Converter is a bridge to third-party gopdf.
@@ -129,8 +131,26 @@ func (convert *Converter) Execute() {
 // add fonts
 func (convert *Converter) AddFont() {
 	for _, font := range convert.fonts {
-		err := convert.pdf.AddTTFFont(font.FontName, font.FileName)
+		if !font.ReadFromData {
+			err := convert.pdf.AddTTFFont(font.FontName, font.FileName)
+			if err != nil {
+				panic("font file:" + font.FileName + " not found")
+			}
+			continue
+		}
+		err := convert.pdf.AddTTFFontData(font.FontName, font.Data)
 		if err != nil {
+			panic(err)
+			panic("font file:" + font.FileName + " not found")
+		}
+	}
+}
+
+func (convert *Converter) AddTTFFontData() {
+	for _, font := range convert.fonts {
+		err := convert.pdf.AddTTFFontData(font.FontName, font.Data)
+		if err != nil {
+			panic(err)
 			panic("font file:" + font.FileName + " not found")
 		}
 	}

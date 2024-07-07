@@ -1,6 +1,7 @@
 package gopdf
 
 import (
+	"embed"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -20,6 +21,9 @@ const (
 var (
 	seed = rand.New(rand.NewSource(time.Now().UnixNano()))
 )
+
+//go:embed example/ttf
+var TTFFiles embed.FS
 
 func SimpleTable() {
 	r := core.CreateReport()
@@ -49,20 +53,42 @@ func SimpleTableCustomA4Page() {
 	font1 := core.FontMap{
 		FontName: TABLE_IG,
 		FileName: "example//ttf/ipaexg.ttf",
+		Data: func() []byte {
+			file, err := TTFFiles.ReadFile("example/ttf/ipaexg.ttf")
+			if err != nil {
+				panic(err)
+			}
+			return file
+		}(),
+		ReadFromData: true,
 	}
 	font2 := core.FontMap{
 		FontName: TABLE_MD,
-		FileName: "example//ttf/mplus-1p-bold.ttf",
+		FileName: "example/ttf/mplus-1p-bold.ttf",
+		Data: func() []byte {
+			file, err := TTFFiles.ReadFile("example/ttf/mplus-1p-bold.ttf")
+			if err != nil {
+				panic(err)
+			}
+			return file
+		}(),
 	}
 	font3 := core.FontMap{
 		FontName: TABLE_MY,
-		FileName: "example//ttf/microsoft.ttf",
+		FileName: "example/ttf/microsoft.ttf",
+		Data: func() []byte {
+			file, err := TTFFiles.ReadFile("example/ttf/microsoft.ttf")
+			if err != nil {
+				panic(err)
+			}
+			return file
+		}(),
 	}
 	r.SetFonts([]*core.FontMap{&font1, &font2, &font3})
 	cfg := core.GetDefaultConfigs()["A4"]
-	cfg.SetEndXY(37.14, 35.00)
+	cfg.SetStartXY(37.14, 35.00)
 	cfg.SetEndXY(580.28, 810.89)
-	cfg.SetWidthAndHeight(520, 841.89)
+	cfg.SetWidthAndHeight(520+50, 841.89)
 	cfg.SetContentWidthAndHeight(520, 841.89)
 
 	password := "hello world"

@@ -4,8 +4,8 @@ import (
 	"math"
 	"strings"
 
-	"github.com/tiechui1994/gopdf/core"
-	"github.com/tiechui1994/gopdf/util"
+	"github.com/coolbit/gopdf/core"
+	"github.com/coolbit/gopdf/util"
 )
 
 // 不会进行自动分页, 可以用于页眉, 页脚的内容.
@@ -300,7 +300,7 @@ func (span *Span) GenerateAtomicCell() error {
 		if span.rightAlign {
 			width := span.pdf.MeasureTextWidth(span.contents[i])
 			if width < span.width {
-				left := span.width - width + span.border.Right+span.border.Left
+				left := span.width - width + span.border.Right + span.border.Left
 				span.border = core.NewScope(left, border.Top, 0, 0)
 			}
 		}

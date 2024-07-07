@@ -2,8 +2,9 @@ package example
 
 import (
 	"fmt"
-	"github.com/tiechui1994/gopdf/core"
 	"testing"
+
+	"github.com/coolbit/gopdf/core"
 )
 
 func SimpleLink() {

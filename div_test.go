@@ -1,10 +1,10 @@
 package gopdf
 
 import (
-	"testing"
 	"strings"
+	"testing"
 
-	"github.com/tiechui1994/gopdf/core"
+	"github.com/coolbit/gopdf/core"
 )
 
 const (

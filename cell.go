@@ -4,8 +4,8 @@ import (
 	"math"
 	"strings"
 
-	"github.com/tiechui1994/gopdf/core"
-	"github.com/tiechui1994/gopdf/util"
+	"github.com/coolbit/gopdf/core"
+	"github.com/coolbit/gopdf/util"
 )
 
 type TextCell struct {
@@ -31,7 +31,7 @@ type TextCell struct {
 }
 
 func NewTextCell(width, lineHeight, lineSpace float64, pdf *core.Report) *TextCell {
-	endX,_ := pdf.GetPageEndXY()
+	endX, _ := pdf.GetPageEndXY()
 	curX, _ := pdf.GetXY()
 	if width > endX-curX {
 		width = endX - curX

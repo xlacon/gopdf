@@ -1,11 +1,11 @@
 package lex
 
 import (
-	"testing"
+	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"log"
-	"encoding/json"
-	"bytes"
+	"testing"
 )
 
 var (
@@ -14,7 +14,7 @@ var (
 
 func init() {
 	log.SetFlags(log.Ltime | log.Lshortfile)
-	InitFunc()
+	//InitFunc()
 	data, _ = ioutil.ReadFile("./lex.md")
 }
 

@@ -149,8 +149,7 @@ func (convert *Converter) AddTTFFontData() {
 	for _, font := range convert.fonts {
 		err := convert.pdf.AddTTFFontData(font.FontName, font.Data)
 		if err != nil {
-			panic(err)
-			panic("font file:" + font.FileName + " not found")
+			panic(fmt.Errorf("font file: %s not found error: %w"+font.FileName, err))
 		}
 	}
 }

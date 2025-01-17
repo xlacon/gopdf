@@ -62,12 +62,30 @@ type Report struct {
 
 	// Callback function, executed after PDF generation
 	callbacks []CallBack
+
+	useProtection bool
+	permissions   int
+	ownerPass     []byte
+	userPass      []byte
 }
 
-func CreateReport() *Report {
+func WithOption(useProtection bool, permissions int, ownerPass, userPass []byte) func(report *Report) {
+	return func(report *Report) {
+		report.useProtection = useProtection
+		report.permissions = permissions
+		report.ownerPass = ownerPass
+		report.userPass = userPass
+	}
+}
+func CreateReport(options ...func(report *Report)) *Report {
 	report := new(Report)
 	report.converter = new(Converter)
-
+	for i := range options {
+		if options[i] != nil {
+			options[i](report)
+		}
+	}
+	report.converter.SetProtection(report.useProtection, report.permissions, report.ownerPass, report.userPass)
 	report.Vars = make(map[string]string)
 	report.executors = make(map[string]*Executor)
 	report.callbacks = make([]CallBack, 0)

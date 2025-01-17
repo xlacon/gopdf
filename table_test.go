@@ -49,7 +49,8 @@ func SimpleTable() {
 }
 
 func SimpleTableCustomA4Page() {
-	r := core.CreateReport()
+	password := "hello world"
+	r := core.CreateReport(core.WithOption(true, gopdf.PermissionsPrint|gopdf.PermissionsCopy|gopdf.PermissionsModify, []byte(password), []byte(password)))
 	font1 := core.FontMap{
 		FontName: TABLE_IG,
 		FileName: "example//ttf/ipaexg.ttf",
@@ -91,10 +92,7 @@ func SimpleTableCustomA4Page() {
 	cfg.SetWidthAndHeight(520+50, 841.89)
 	cfg.SetContentWidthAndHeight(520, 841.89)
 
-	password := "hello world"
-	cfg.SetProtection(true, gopdf.PermissionsPrint|gopdf.PermissionsCopy|gopdf.PermissionsModify, []byte(password), []byte(password))
 	r.SetPage("A4", "P")
-
 	r.RegisterExecutor(core.Executor(SimpleTableExecutor), core.Detail)
 
 	r.Execute("simple_table_custom_a4_page.pdf")

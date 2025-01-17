@@ -9,11 +9,6 @@ type Config struct {
 	width, height  float64 // PDF page width and height
 
 	contentWidth, contentHeight float64 // PDF page content width and height
-
-	useProtection bool
-	permissions   int
-	ownerPass     []byte
-	userPass      []byte
 }
 
 func (c *Config) SetStartXY(x, y float64) {
@@ -34,13 +29,6 @@ func (c *Config) SetWidthAndHeight(width, height float64) {
 func (c *Config) SetContentWidthAndHeight(width, height float64) {
 	c.contentWidth = width
 	c.contentHeight = height
-}
-
-func (c *Config) SetProtection(useProtection bool, permissions int, ownerPass, userPass []byte) {
-	c.useProtection = useProtection
-	c.permissions = permissions
-	c.ownerPass = ownerPass
-	c.userPass = userPass
 }
 
 func GetDefaultConfigs() map[string]*Config {

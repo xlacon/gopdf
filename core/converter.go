@@ -36,6 +36,18 @@ type Converter struct {
 
 	linew    float64 // line width
 	lastFont string  // last used font name
+
+	useProtection bool
+	permissions   int
+	ownerPass     []byte
+	userPass      []byte
+}
+
+func (convert *Converter) SetProtection(useProtection bool, permissions int, ownerPass, userPass []byte) {
+	convert.useProtection = useProtection
+	convert.permissions = permissions
+	convert.ownerPass = ownerPass
+	convert.userPass = userPass
 }
 
 // var convert.unit float64 = 2.834645669
@@ -180,10 +192,10 @@ func (convert *Converter) Page(line string, elements []string) {
 				Unit:     gopdf.Unit_PT,
 				PageSize: gopdf.Rect{W: config.width, H: config.height},
 				Protection: gopdf.PDFProtectionConfig{
-					UseProtection: config.useProtection,
-					Permissions:   config.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
-					OwnerPass:     config.ownerPass,
-					UserPass:      config.userPass,
+					UseProtection: convert.useProtection,
+					Permissions:   convert.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
+					OwnerPass:     convert.ownerPass,
+					UserPass:      convert.userPass,
 				},
 			})
 		} else if elements[3] == "L" {
@@ -192,10 +204,10 @@ func (convert *Converter) Page(line string, elements []string) {
 				Unit:     gopdf.Unit_PT,
 				PageSize: gopdf.Rect{W: config.height, H: config.width},
 				Protection: gopdf.PDFProtectionConfig{
-					UseProtection: config.useProtection,
-					Permissions:   config.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
-					OwnerPass:     config.ownerPass,
-					UserPass:      config.userPass,
+					UseProtection: convert.useProtection,
+					Permissions:   convert.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
+					OwnerPass:     convert.ownerPass,
+					UserPass:      convert.userPass,
 				},
 			})
 		} else {
@@ -210,10 +222,10 @@ func (convert *Converter) Page(line string, elements []string) {
 				Unit:     gopdf.Unit_PT,
 				PageSize: gopdf.Rect{W: config.width, H: config.height},
 				Protection: gopdf.PDFProtectionConfig{
-					UseProtection: config.useProtection,
-					Permissions:   config.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
-					OwnerPass:     config.ownerPass,
-					UserPass:      config.userPass,
+					UseProtection: convert.useProtection,
+					Permissions:   convert.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
+					OwnerPass:     convert.ownerPass,
+					UserPass:      convert.userPass,
 				},
 			})
 		} else if elements[3] == "L" {
@@ -222,10 +234,10 @@ func (convert *Converter) Page(line string, elements []string) {
 				Unit:     gopdf.Unit_PT,
 				PageSize: gopdf.Rect{W: config.height, H: config.width},
 				Protection: gopdf.PDFProtectionConfig{
-					UseProtection: config.useProtection,
-					Permissions:   config.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
-					OwnerPass:     config.ownerPass,
-					UserPass:      config.userPass,
+					UseProtection: convert.useProtection,
+					Permissions:   convert.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
+					OwnerPass:     convert.ownerPass,
+					UserPass:      convert.userPass,
 				},
 			})
 		} else {
@@ -240,10 +252,10 @@ func (convert *Converter) Page(line string, elements []string) {
 				Unit:     gopdf.Unit_PT,
 				PageSize: gopdf.Rect{W: config.width, H: config.height},
 				Protection: gopdf.PDFProtectionConfig{
-					UseProtection: config.useProtection,
-					Permissions:   config.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
-					OwnerPass:     config.ownerPass,
-					UserPass:      config.userPass,
+					UseProtection: convert.useProtection,
+					Permissions:   convert.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
+					OwnerPass:     convert.ownerPass,
+					UserPass:      convert.userPass,
 				},
 			})
 		} else if elements[3] == "L" {
@@ -252,10 +264,10 @@ func (convert *Converter) Page(line string, elements []string) {
 				Unit:     gopdf.Unit_PT,
 				PageSize: gopdf.Rect{W: config.height, H: config.width},
 				Protection: gopdf.PDFProtectionConfig{
-					UseProtection: config.useProtection,
-					Permissions:   config.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
-					OwnerPass:     config.ownerPass,
-					UserPass:      config.userPass,
+					UseProtection: convert.useProtection,
+					Permissions:   convert.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
+					OwnerPass:     convert.ownerPass,
+					UserPass:      convert.userPass,
 				},
 			})
 		} else {

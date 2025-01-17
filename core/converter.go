@@ -41,6 +41,12 @@ type Converter struct {
 	permissions   int
 	ownerPass     []byte
 	userPass      []byte
+
+	ConfigsMap map[string]*Config
+}
+
+func (convert *Converter) SetConfigsMap(configsMap map[string]*Config) {
+	convert.ConfigsMap = configsMap
 }
 
 func (convert *Converter) SetProtection(useProtection bool, permissions int, ownerPass, userPass []byte) {
@@ -184,13 +190,13 @@ func (convert *Converter) Page(line string, elements []string) {
 	'A5': [419.53, 595.28],
 	*/
 	case "A3":
-		config := defaultConfigs["A3"]
+		config := convert.ConfigsMap["A3"]
 		convert.setunit(elements[1])
 		if elements[3] == "P" {
 			//convert.start(config.width, config.height)
 			convert.startWithConfig(gopdf.Config{
 				Unit:     gopdf.Unit_PT,
-				PageSize: gopdf.Rect{W: config.width, H: config.height},
+				PageSize: gopdf.Rect{W: config.Width, H: config.Height},
 				Protection: gopdf.PDFProtectionConfig{
 					UseProtection: convert.useProtection,
 					Permissions:   convert.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
@@ -202,7 +208,7 @@ func (convert *Converter) Page(line string, elements []string) {
 			//convert.start(config.height, config.width)
 			convert.startWithConfig(gopdf.Config{
 				Unit:     gopdf.Unit_PT,
-				PageSize: gopdf.Rect{W: config.height, H: config.width},
+				PageSize: gopdf.Rect{W: config.Height, H: config.Width},
 				Protection: gopdf.PDFProtectionConfig{
 					UseProtection: convert.useProtection,
 					Permissions:   convert.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
@@ -214,13 +220,13 @@ func (convert *Converter) Page(line string, elements []string) {
 			panic("Page Orientation accept P or L")
 		}
 	case "A4":
-		config := defaultConfigs["A4"]
+		config := convert.ConfigsMap["A4"]
 		convert.setunit(elements[1])
 		if elements[3] == "P" {
 			//convert.start(config.width, config.height)
 			convert.startWithConfig(gopdf.Config{
 				Unit:     gopdf.Unit_PT,
-				PageSize: gopdf.Rect{W: config.width, H: config.height},
+				PageSize: gopdf.Rect{W: config.Width, H: config.Height},
 				Protection: gopdf.PDFProtectionConfig{
 					UseProtection: convert.useProtection,
 					Permissions:   convert.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
@@ -232,7 +238,7 @@ func (convert *Converter) Page(line string, elements []string) {
 			//convert.start(config.height, config.width)
 			convert.startWithConfig(gopdf.Config{
 				Unit:     gopdf.Unit_PT,
-				PageSize: gopdf.Rect{W: config.height, H: config.width},
+				PageSize: gopdf.Rect{W: config.Height, H: config.Width},
 				Protection: gopdf.PDFProtectionConfig{
 					UseProtection: convert.useProtection,
 					Permissions:   convert.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
@@ -244,13 +250,13 @@ func (convert *Converter) Page(line string, elements []string) {
 			panic("Page Orientation accept P or L")
 		}
 	case "LTR":
-		config := defaultConfigs["LTR"]
+		config := convert.ConfigsMap["LTR"]
 		convert.setunit(elements[1])
 		if elements[3] == "P" {
 			//convert.start(config.width, config.height)
 			convert.startWithConfig(gopdf.Config{
 				Unit:     gopdf.Unit_PT,
-				PageSize: gopdf.Rect{W: config.width, H: config.height},
+				PageSize: gopdf.Rect{W: config.Width, H: config.Height},
 				Protection: gopdf.PDFProtectionConfig{
 					UseProtection: convert.useProtection,
 					Permissions:   convert.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify
@@ -262,7 +268,7 @@ func (convert *Converter) Page(line string, elements []string) {
 			//convert.start(config.height, config.width)
 			convert.startWithConfig(gopdf.Config{
 				Unit:     gopdf.Unit_PT,
-				PageSize: gopdf.Rect{W: config.height, H: config.width},
+				PageSize: gopdf.Rect{W: config.Height, H: config.Width},
 				Protection: gopdf.PDFProtectionConfig{
 					UseProtection: convert.useProtection,
 					Permissions:   convert.permissions, //gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify

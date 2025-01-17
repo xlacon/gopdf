@@ -4,35 +4,11 @@ import "fmt"
 
 // the units of below is pixels.
 type Config struct {
-	startX, startY float64 // PDF page start position
-	endX, endY     float64 // PDF page end postion
-	width, height  float64 // PDF page width and height
+	StartX, StartY float64 // PDF page start position
+	EndX, EndY     float64 // PDF page end postion
+	Width, Height  float64 // PDF page width and height
 
-	contentWidth, contentHeight float64 // PDF page content width and height
-}
-
-func (c *Config) SetStartXY(x, y float64) {
-	c.startX = x
-	c.startY = y
-}
-
-func (c *Config) SetEndXY(x, y float64) {
-	c.endX = x
-	c.endY = y
-}
-
-func (c *Config) SetWidthAndHeight(width, height float64) {
-	c.width = width
-	c.height = height
-}
-
-func (c *Config) SetContentWidthAndHeight(width, height float64) {
-	c.contentWidth = width
-	c.contentHeight = height
-}
-
-func GetDefaultConfigs() map[string]*Config {
-	return defaultConfigs
+	ContentWidth, ContentHeight float64 // PDF page content width and height
 }
 
 // Params width, height is pdf page width and height
@@ -49,36 +25,34 @@ func NewConfig(width, height float64, padingH, padingV float64) (*Config, error)
 	}
 
 	c := &Config{
-		width:  width,
-		height: height,
+		Width:  width,
+		Height: height,
 
-		startX: padingH,
-		startY: padingV,
+		StartX: padingH,
+		StartY: padingV,
 
-		contentWidth:  width - 2*padingH,
-		contentHeight: height - 2*padingV,
+		ContentWidth:  width - 2*padingH,
+		ContentHeight: height - 2*padingV,
 	}
 
-	c.endX = c.startX + c.contentWidth
-	c.endY = c.startY + c.contentHeight
+	c.EndX = c.StartX + c.ContentWidth
+	c.EndY = c.StartY + c.ContentHeight
 
 	return c, nil
 }
 
 func (config *Config) GetWidthAndHeight() (width, height float64) {
-	return config.width, config.width
+	return config.Width, config.Width
 }
 
 // Get pdf page start position, from the position you can write the pdf body content.
 func (config *Config) GetStart() (x, y float64) {
-	return config.startX, config.startY
+	return config.StartX, config.StartY
 }
 
 func (config *Config) GetEnd() (x, y float64) {
-	return config.endX, config.endY
+	return config.EndX, config.EndY
 }
-
-var defaultConfigs map[string]*Config // page -> config
 
 /*
 *************************************
@@ -93,48 +67,3 @@ A0 ~ A5 page width and height config:
 
 **************************************
 */
-func init() {
-	defaultConfigs = make(map[string]*Config)
-
-	defaultConfigs["A3"] = &Config{
-		startX:        90.14,
-		startY:        72.00,
-		endX:          751.76,
-		endY:          1118.55,
-		width:         841.89,
-		height:        1190.55,
-		contentWidth:  661.62,
-		contentHeight: 1046.55,
-	}
-
-	defaultConfigs["A4"] = &Config{
-		startX:        90.14,
-		startY:        72.00,
-		endX:          505.14,
-		endY:          769.89,
-		width:         595.28,
-		height:        841.89,
-		contentWidth:  415,
-		contentHeight: 697.89,
-	}
-
-	defaultConfigs["LTR"] = &Config{
-		startX:        90.14,
-		startY:        72.00,
-		endX:          521.86,
-		endY:          720,
-		width:         612,
-		height:        792,
-		contentWidth:  431.72,
-		contentHeight: 648,
-	}
-}
-
-// Register create self pdf config
-func Register(size string, config *Config) {
-	if _, ok := defaultConfigs[size]; ok {
-		panic("config size has exist")
-	}
-
-	defaultConfigs[size] = config
-}

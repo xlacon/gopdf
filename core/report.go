@@ -67,9 +67,11 @@ type Report struct {
 	permissions   int
 	ownerPass     []byte
 	userPass      []byte
+
+	ConfigsMap map[string]*Config
 }
 
-func WithOption(useProtection bool, permissions int, ownerPass, userPass []byte) func(report *Report) {
+func WithProtection(useProtection bool, permissions int, ownerPass, userPass []byte) func(report *Report) {
 	return func(report *Report) {
 		report.useProtection = useProtection
 		report.permissions = permissions
@@ -77,14 +79,45 @@ func WithOption(useProtection bool, permissions int, ownerPass, userPass []byte)
 		report.userPass = userPass
 	}
 }
+
+func WithOverrideConfig(pageSize string, config *Config) func(report *Report) {
+	return func(report *Report) {
+		if _, ok := report.ConfigsMap[pageSize]; ok {
+			report.ConfigsMap[pageSize] = config
+		}
+	}
+}
+
 func CreateReport(options ...func(report *Report)) *Report {
 	report := new(Report)
 	report.converter = new(Converter)
+	report.ConfigsMap = map[string]*Config{
+		"A3": {
+			StartX: 90.14, StartY: 72.00,
+			EndX: 751.76, EndY: 1118.55,
+			Width: 841.89, Height: 1190.55,
+			ContentWidth: 661.62, ContentHeight: 1046.55,
+		},
+		"A4": {
+			StartX: 90.14, StartY: 72.00,
+			EndX: 505.14, EndY: 769.89,
+			Width: 595.28, Height: 841.89,
+			ContentWidth: 415, ContentHeight: 697.89,
+		},
+		"LTR": {
+			StartX: 90.14, StartY: 72.00,
+			EndX: 521.86, EndY: 720,
+			Width: 612, Height: 792,
+			ContentWidth: 431.72, ContentHeight: 648,
+		},
+	}
+
 	for i := range options {
 		if options[i] != nil {
 			options[i](report)
 		}
 	}
+	report.converter.SetConfigsMap(report.ConfigsMap)
 	report.converter.SetProtection(report.useProtection, report.permissions, report.ownerPass, report.userPass)
 	report.Vars = make(map[string]string)
 	report.executors = make(map[string]*Executor)
@@ -172,8 +205,8 @@ func (report *Report) executePageFooter() {
 	}
 
 	curX, curY := report.GetXY()
-	report.currY = report.config.endY
-	report.currX = report.config.startX
+	report.currY = report.config.EndY
+	report.currX = report.config.StartX
 
 	h := report.executors[Footer]
 	if h != nil {
@@ -189,7 +222,7 @@ func (report *Report) executePageHeader() {
 
 	curX, curY := report.GetXY()
 	report.currY = 0
-	report.currX = report.config.startX
+	report.currX = report.config.StartX
 	h := report.executors[Header]
 	if h != nil {
 		(*h)(report)
@@ -339,7 +372,7 @@ func (report *Report) SetMargin(dx, dy float64) {
 // 设置页面的尺寸, unit: mm pt in  size: A4 LTR, 目前支持常用的两种方式
 func (report *Report) SetPage(size string, orientation string) {
 	unit := "pt"
-	config, ok := defaultConfigs[size]
+	config, ok := report.ConfigsMap[size]
 	if !ok {
 		panic("the config not exists, please add config")
 	}
@@ -349,35 +382,35 @@ func (report *Report) SetPage(size string, orientation string) {
 		switch orientation {
 		case "P":
 			report.addAtomicCell("P|" + unit + "|A4|P")
-			report.pageWidth = config.width
-			report.pageHeight = config.height
+			report.pageWidth = config.Width
+			report.pageHeight = config.Height
 		case "L":
 			report.addAtomicCell("P|" + unit + "|A4|L")
-			report.pageWidth = config.height
-			report.pageHeight = config.width
+			report.pageWidth = config.Height
+			report.pageHeight = config.Width
 		}
 	case "LTR":
 		switch orientation {
 		case "P":
-			report.pageWidth = config.width
-			report.pageHeight = config.height
+			report.pageWidth = config.Width
+			report.pageHeight = config.Height
 			report.addAtomicCell("P|" + unit + "|" + strconv.FormatFloat(report.pageWidth, 'f', 4, 64) +
 				"|" + strconv.FormatFloat(report.pageHeight, 'f', 4, 64))
 		case "L":
-			report.pageWidth = config.height
-			report.pageHeight = config.width
+			report.pageWidth = config.Height
+			report.pageHeight = config.Width
 			report.addAtomicCell("P  |" + unit + "|" + strconv.FormatFloat(report.pageWidth, 'f', 4, 64) +
 				"|" + strconv.FormatFloat(report.pageHeight, 'f', 4, 64))
 		}
 	}
 
-	report.contentWidth = config.contentWidth
-	report.contentHeight = config.contentHeight
+	report.contentWidth = config.ContentWidth
+	report.contentHeight = config.ContentHeight
 
-	report.pageStartX = config.startX
-	report.pageStartY = config.startY
-	report.pageEndX = config.endX
-	report.pageEndY = config.endY
+	report.pageStartX = config.StartX
+	report.pageStartY = config.StartY
+	report.pageEndX = config.EndX
+	report.pageEndY = config.EndY
 	report.config = config
 
 	report.execute(false)
@@ -389,21 +422,21 @@ func (report *Report) SetCustomA4Page(orientation string, config *Config) {
 	switch orientation {
 	case "P":
 		report.addAtomicCell("P|" + unit + "|A4|P")
-		report.pageWidth = config.width
-		report.pageHeight = config.height
+		report.pageWidth = config.Width
+		report.pageHeight = config.Height
 	case "L":
 		report.addAtomicCell("P|" + unit + "|A4|L")
-		report.pageWidth = config.height
-		report.pageHeight = config.width
+		report.pageWidth = config.Height
+		report.pageHeight = config.Width
 	}
 
-	report.contentWidth = config.contentWidth
-	report.contentHeight = config.contentHeight
+	report.contentWidth = config.ContentWidth
+	report.contentHeight = config.ContentHeight
 
-	report.pageStartX = config.startX
-	report.pageStartY = config.startY
-	report.pageEndX = config.endX
-	report.pageEndY = config.endY
+	report.pageStartX = config.StartX
+	report.pageStartY = config.StartY
+	report.pageEndX = config.EndX
+	report.pageEndY = config.EndY
 	report.config = config
 
 	report.execute(false)
@@ -595,8 +628,8 @@ func (report *Report) Var(name string, val string) {
 // 外部链接
 func (report *Report) ExternalLink(x, y, th float64, content, link string) {
 	tw := report.MeasureTextWidth(content)
-	if x+tw > report.config.endX {
-		tw = report.config.endX - x
+	if x+tw > report.config.EndX {
+		tw = report.config.EndX - x
 	}
 	report.addAtomicCell("EL|" + util.Ftoa(x) + "|" + util.Ftoa(y) + "|" + util.Ftoa(tw) + "|" + util.Ftoa(th) + "|" +
 		content + "|" + link)
@@ -606,8 +639,8 @@ func (report *Report) ExternalLink(x, y, th float64, content, link string) {
 
 func (report *Report) InternalLinkAnchor(x, y, th float64, content, anchor string) {
 	tw := report.MeasureTextWidth(content)
-	if x+tw > report.config.endX {
-		tw = report.config.endX - x
+	if x+tw > report.config.EndX {
+		tw = report.config.EndX - x
 	}
 
 	report.addAtomicCell("ILA|" + util.Ftoa(x) + "|" + util.Ftoa(y) + "|" + util.Ftoa(tw) + "|" + util.Ftoa(th) + "|" +
@@ -618,8 +651,8 @@ func (report *Report) InternalLinkAnchor(x, y, th float64, content, anchor strin
 
 func (report *Report) InternalLinkLink(x, y float64, content, anchor string) {
 	tw := report.MeasureTextWidth(content)
-	if x+tw > report.config.endX {
-		tw = report.config.endX - x
+	if x+tw > report.config.EndX {
+		tw = report.config.EndX - x
 	}
 
 	report.addAtomicCell("ILL|" + util.Ftoa(x) + "|" + util.Ftoa(y) + "|" + util.Ftoa(tw) + "|" + content + "|" + anchor)

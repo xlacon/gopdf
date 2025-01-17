@@ -50,7 +50,17 @@ func SimpleTable() {
 
 func SimpleTableCustomA4Page() {
 	password := "hello world"
-	r := core.CreateReport(core.WithOption(true, gopdf.PermissionsPrint|gopdf.PermissionsCopy|gopdf.PermissionsModify, []byte(password), []byte(password)))
+	r := core.CreateReport(core.WithProtection(true, gopdf.PermissionsPrint|gopdf.PermissionsCopy|gopdf.PermissionsModify, []byte(password), []byte(password)),
+		core.WithOverrideConfig("A4", &core.Config{
+			StartX:        37.14,
+			StartY:        35.00,
+			EndX:          580.28,
+			EndY:          810.89,
+			Width:         520 + 50,
+			Height:        841.89,
+			ContentWidth:  520,
+			ContentHeight: 841.89,
+		}))
 	font1 := core.FontMap{
 		FontName: TABLE_IG,
 		FileName: "example//ttf/ipaexg.ttf",
@@ -86,12 +96,6 @@ func SimpleTableCustomA4Page() {
 		}(),
 	}
 	r.SetFonts([]*core.FontMap{&font1, &font2, &font3})
-	cfg := core.GetDefaultConfigs()["A4"]
-	cfg.SetStartXY(37.14, 35.00)
-	cfg.SetEndXY(580.28, 810.89)
-	cfg.SetWidthAndHeight(520+50, 841.89)
-	cfg.SetContentWidthAndHeight(520, 841.89)
-
 	r.SetPage("A4", "P")
 	r.RegisterExecutor(core.Executor(SimpleTableExecutor), core.Detail)
 

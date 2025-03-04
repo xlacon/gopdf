@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/coolbit/gopdf/core"
+	"github.com/xlacon/gopdf/core"
 )
 
 func SimpleLink() {

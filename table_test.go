@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coolbit/gopdf/core"
 	"github.com/signintech/gopdf"
+	"github.com/xlacon/gopdf/core"
 )
 
 const (

@@ -27,7 +27,7 @@ gopdf 是一个生成 `PDF` 文档的 `Golang` 库. 主要有以下的特点:
 ## 安装
 
 ```
-go get -u github.com/coolbit/gopdf
+go get -u github.com/xlacon/gopdf
 ```
 
 ## 案例展示: 

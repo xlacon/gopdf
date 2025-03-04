@@ -8,8 +8,8 @@ import (
 	"log"
 	"testing"
 
-	"github.com/coolbit/gopdf/core"
-	"github.com/coolbit/gopdf/lex"
+	"github.com/xlacon/gopdf/core"
+	"github.com/xlacon/gopdf/lex"
 )
 
 func init() {
@@ -46,7 +46,7 @@ func MarkdownReport() {
 }
 
 func MarkdownReportExecutor(report *core.Report) {
-	data, _ := ioutil.ReadFile("./markdown.md")
+	data, _ := ioutil.ReadFile("./report.md")
 	var lexer = lex.NewLex()
 	tokens := lexer.Lex(string(data))
 	var fonts = map[string]string{

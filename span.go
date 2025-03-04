@@ -4,8 +4,8 @@ import (
 	"math"
 	"strings"
 
-	"github.com/coolbit/gopdf/core"
-	"github.com/coolbit/gopdf/util"
+	"github.com/xlacon/gopdf/core"
+	"github.com/xlacon/gopdf/util"
 )
 
 // 不会进行自动分页, 可以用于页眉, 页脚的内容.

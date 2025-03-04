@@ -1,4 +1,4 @@
-module github.com/coolbit/gopdf
+module github.com/xlacon/gopdf
 
 go 1.20
 

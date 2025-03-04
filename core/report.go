@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/coolbit/gopdf/util"
+	"github.com/xlacon/gopdf/util"
 )
 
 const (

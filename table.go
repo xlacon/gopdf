@@ -3,7 +3,7 @@ package gopdf
 import (
 	"math"
 
-	"github.com/coolbit/gopdf/core"
+	"github.com/xlacon/gopdf/core"
 )
 
 /**

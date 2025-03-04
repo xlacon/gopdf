@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/coolbit/gopdf/core"
+	"github.com/xlacon/gopdf/core"
 )
 
 type Image struct {

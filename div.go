@@ -4,8 +4,8 @@ import (
 	"math"
 	"strings"
 
-	"github.com/coolbit/gopdf/core"
-	"github.com/coolbit/gopdf/util"
+	"github.com/xlacon/gopdf/core"
+	"github.com/xlacon/gopdf/util"
 )
 
 const (

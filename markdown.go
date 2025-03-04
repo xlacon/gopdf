@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/coolbit/gopdf/core"
-	"github.com/coolbit/gopdf/lex"
-	"github.com/coolbit/gopdf/util"
+	"github.com/xlacon/gopdf/core"
+	"github.com/xlacon/gopdf/lex"
+	"github.com/xlacon/gopdf/util"
 )
 
 const (
